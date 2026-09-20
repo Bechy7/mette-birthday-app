@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Mette Birthday App</title>
+    <meta
+      name="description"
+      content="A mobile-only birthday app for uploading photos and writing a message."
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="desktop-warning">
+      <div class="warning-card">
+        <h1>Mobile only</h1>
+        <p>This app is designed for phone screens only.</p>
+      </div>
+    </div>
+
+    <main class="app-shell">
+      <header class="topbar">
+        <p class="eyebrow">Mette Birthday</p>
+        <h1>Share a memory</h1>
+      </header>
+
+      <form id="uploadForm" class="upload-card">
+        <label class="file-upload" for="photoInput">
+          <span>Choose a picture</span>
+          <input id="photoInput" type="file" accept="image/*" />
+        </label>
+
+        <div id="previewWrap" class="preview-wrap hidden">
+          <img id="imagePreview" src="" alt="Preview" />
+        </div>
+
+        <label class="label" for="messageInput">Write your message</label>
+        <textarea
+          id="messageInput"
+          rows="4"
+          placeholder="Write something sweet..."
+          maxlength="220"
+        ></textarea>
+
+        <button type="submit" class="primary-btn">Save to gallery</button>
+      </form>
+
+      <nav class="bottom-nav">
+        <a href="gallery.html" class="secondary-btn">View gallery</a>
+      </nav>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>

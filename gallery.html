@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Gallery | Mette Birthday App</title>
+    <meta
+      name="description"
+      content="See all pictures and messages shared in this birthday gallery."
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="desktop-warning">
+      <div class="warning-card">
+        <h1>Mobile only</h1>
+        <p>This app is designed for phone screens only.</p>
+      </div>
+    </div>
+
+    <main class="app-shell gallery-shell">
+      <header class="topbar gallery-header">
+        <a href="index.html" class="back-link">← Back</a>
+        <h1>Gallery</h1>
+      </header>
+
+      <section id="gallery" class="gallery-list" aria-live="polite"></section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
