@@ -1,4 +1,5 @@
 const STORAGE_KEY = 'metteBirthdayGallery';
+const SELECTED_IMAGE_KEY = 'metteBirthdaySelectedImage';
 
 const loadEntries = () => {
   try {
@@ -12,6 +13,27 @@ const loadEntries = () => {
 
 const saveEntries = (entries) => {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
+};
+
+const loadSelectedImage = () => {
+  try {
+    return localStorage.getItem(SELECTED_IMAGE_KEY);
+  } catch (error) {
+    console.error('Failed to load selected image:', error);
+    return null;
+  }
+};
+
+const saveSelectedImage = (dataUrl) => {
+  try {
+    localStorage.setItem(SELECTED_IMAGE_KEY, dataUrl);
+  } catch (error) {
+    console.error('Failed to save selected image:', error);
+  }
+};
+
+const clearSelectedImage = () => {
+  localStorage.removeItem(SELECTED_IMAGE_KEY);
 };
 
 const getImageDataUrl = (file) => {
@@ -73,7 +95,13 @@ const setupUploadPage = () => {
 
   if (!form || !photoInput || !cameraInput || !previewWrap || !imagePreview) return;
 
-  const handlePhotoSelected = (event) => {
+  const selectedImage = loadSelectedImage();
+  if (selectedImage) {
+    imagePreview.src = selectedImage;
+    previewWrap.classList.remove('hidden');
+  }
+
+  const handlePhotoSelected = async (event) => {
     const [file] = event.target.files;
     if (!file) return;
 
@@ -83,16 +111,15 @@ const setupUploadPage = () => {
       return;
     }
 
-    // Clear the other input so the selected camera photo is the one saved.
-    if (event.target === cameraInput) photoInput.value = '';
-    if (event.target === photoInput) cameraInput.value = '';
-
-    const reader = new FileReader();
-    reader.onload = () => {
-      imagePreview.src = reader.result;
+    try {
+      const dataUrl = await getImageDataUrl(file);
+      saveSelectedImage(dataUrl);
+      imagePreview.src = dataUrl;
       previewWrap.classList.remove('hidden');
-    };
-    reader.readAsDataURL(file);
+    } catch (error) {
+      console.error(error);
+      alert('The selected photo could not be loaded. Please try again.');
+    }
   };
 
   photoInput.addEventListener('change', handlePhotoSelected);
@@ -101,16 +128,17 @@ const setupUploadPage = () => {
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
 
+    const imageFromStorage = loadSelectedImage();
     const file = cameraInput.files[0] || photoInput.files[0];
     const message = document.getElementById('messageInput').value.trim();
 
-    if (!file) {
+    if (!file && !imageFromStorage) {
       alert('Please take a photo or choose one from your phone first.');
       return;
     }
 
     try {
-      const image = await getImageDataUrl(file);
+      const image = file ? await getImageDataUrl(file) : imageFromStorage;
       const entries = loadEntries();
 
       entries.push({
@@ -120,9 +148,14 @@ const setupUploadPage = () => {
       });
 
       saveEntries(entries);
+      clearSelectedImage();
       form.reset();
       previewWrap.classList.add('hidden');
       imagePreview.src = '';
+      photoInput.value = '';
+      cameraInput.value = '';
+      document.getElementById('messageInput').value = '';
+
       window.location.href = 'gallery.html';
     } catch (error) {
       console.error(error);
