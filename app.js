@@ -177,8 +177,6 @@ const setupUploadPage = () => {
       photoInput.value = '';
       cameraInput.value = '';
       document.getElementById('messageInput').value = '';
-
-      window.location.href = 'gallery.html';
     } catch (error) {
       console.error(error);
       alert('Something went wrong while saving your photo. Please try again.');
