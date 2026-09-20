@@ -71,16 +71,25 @@ h1 {
   gap: 16px;
 }
 
+.photo-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
 .file-upload {
   display: flex;
   align-items: center;
   justify-content: center;
   min-height: 54px;
+  padding: 8px;
   border: 2px dashed var(--primary);
   border-radius: 16px;
   background: rgba(255, 216, 233, 0.2);
   color: var(--primary-dark);
   font-weight: 700;
+  font-size: 0.9rem;
+  text-align: center;
   cursor: pointer;
   position: relative;
   overflow: hidden;

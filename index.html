@@ -25,13 +25,20 @@
       </header>
 
       <form id="uploadForm" class="upload-card">
-        <label class="file-upload" for="photoInput">
-          <span>Choose a picture</span>
-          <input id="photoInput" type="file" accept="image/*" />
-        </label>
+        <div class="photo-actions">
+          <label class="file-upload" for="cameraInput">
+            <span>Take a photo</span>
+            <input id="cameraInput" type="file" accept="image/*" capture="environment" />
+          </label>
+
+          <label class="file-upload" for="photoInput">
+            <span>Choose from phone</span>
+            <input id="photoInput" type="file" accept="image/*" />
+          </label>
+        </div>
 
         <div id="previewWrap" class="preview-wrap hidden">
-          <img id="imagePreview" src="" alt="Preview" />
+          <img id="imagePreview" src="" alt="Preview of selected photo" />
         </div>
 
         <label class="label" for="messageInput">Write your message</label>

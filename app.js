@@ -67,20 +67,25 @@ const escapeHtml = (value) => {
 const setupUploadPage = () => {
   const form = document.getElementById('uploadForm');
   const photoInput = document.getElementById('photoInput');
+  const cameraInput = document.getElementById('cameraInput');
   const previewWrap = document.getElementById('previewWrap');
   const imagePreview = document.getElementById('imagePreview');
 
-  if (!form || !photoInput || !previewWrap || !imagePreview) return;
+  if (!form || !photoInput || !cameraInput || !previewWrap || !imagePreview) return;
 
-  photoInput.addEventListener('change', (event) => {
+  const handlePhotoSelected = (event) => {
     const [file] = event.target.files;
     if (!file) return;
 
     if (!file.type.startsWith('image/')) {
       alert('Please choose an image file.');
-      photoInput.value = '';
+      event.target.value = '';
       return;
     }
+
+    // Clear the other input so the selected camera photo is the one saved.
+    if (event.target === cameraInput) photoInput.value = '';
+    if (event.target === photoInput) cameraInput.value = '';
 
     const reader = new FileReader();
     reader.onload = () => {
@@ -88,16 +93,19 @@ const setupUploadPage = () => {
       previewWrap.classList.remove('hidden');
     };
     reader.readAsDataURL(file);
-  });
+  };
+
+  photoInput.addEventListener('change', handlePhotoSelected);
+  cameraInput.addEventListener('change', handlePhotoSelected);
 
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
 
-    const file = photoInput.files[0];
+    const file = cameraInput.files[0] || photoInput.files[0];
     const message = document.getElementById('messageInput').value.trim();
 
     if (!file) {
-      alert('Please choose a picture first.');
+      alert('Please take a photo or choose one from your phone first.');
       return;
     }
 
@@ -114,9 +122,7 @@ const setupUploadPage = () => {
       saveEntries(entries);
       form.reset();
       previewWrap.classList.add('hidden');
-      photoInput.value = '';
-      document.getElementById('messageInput').value = '';
-
+      imagePreview.src = '';
       window.location.href = 'gallery.html';
     } catch (error) {
       console.error(error);
